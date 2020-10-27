@@ -14,7 +14,7 @@ function [estRefl, weightsRefl, estEm, weightsEm, estEx, weightsEx, predRefl, pr
 % basisEx     <--> Bx --> nWaves * nBasisEx
 % BasisEm     <--> Bm --> nWaves * nBasisEm
 
-%% Corresponding notations of the output variables as per the paper
+%% Corresponding notations of the output variables as per the paper and their order
 % estRefl     <--> r  --> nWaves * 1
 % weightsRefl <--> wr --> nBasisRefl * 1
 % estEm       <--> em --> nWaves * 1
@@ -62,8 +62,8 @@ for it = 1 : maxIter
 
     cvx_begin quiet
         cvx_precision default
-        variables weightsRefl(nBasisRefl,1) weightsEx(nBasisEx,1)
-        minimize sum(sum_square_abs(pixelVal - cameraGain.*(cameraMat'*diag(basisRefl*weightsRefl)*illuminant) - cameraGain.*(cameraMat'*tril((basisEm*weightsEm)*(basisEx*weightsEx)',-1)*illuminant))) + alpha*norm(Rrefl*weightsRefl,2) + beta*norm(Rem*weightsEm,2) + gamma*norm(Rex*weightsEx,2)
+        variables weightsRefl(nBasisRefl,1) weightsEx(nBasisEx, 1)
+        minimize sum(sum_square_abs(pixelVal - cameraGain.*(cameraMat'*diag(basisRefl*weightsRefl)*illuminant) - cameraGain.*(cameraMat'*tril((basisEm*weightsEm)*(basisEx*weightsEx)',-1)*illuminant))) + alpha*norm(nablaRefl*weightsRefl,2) + beta*norm(nablaEm*weightsEm,2) + gamma*norm(nablaEx*weightsEx,2)
         subject to
             1 >= basisRefl*weightsRefl >= 0
             basisEx*weightsEx >= 0

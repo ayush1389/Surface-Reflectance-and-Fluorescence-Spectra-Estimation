@@ -15,7 +15,7 @@ function [estRefl, weightsRefl, estEm, weightsEm, estEx, weightsEx, predRefl, pr
 % BasisEm     <--> Bm --> nWaves * nBasisEm
 % cameraOffset        --> nFilters * nChannels * nSamples (for practical purposes)
 
-%% Corresponding notations of the output variables as per the paper
+%% Corresponding notations of the output variables as per the paper and their order
 % estRefl     <--> r  --> nWaves * nSamples
 % weightsRefl <--> wr --> nBasisRefl * nSamples
 % estEm       <--> em --> nWaves * nSamples
