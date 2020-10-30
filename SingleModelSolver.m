@@ -51,7 +51,7 @@ weightsEx = ones(nBasisEx, 1)/nBasisEx;
 %% Convex optimisation
 for it = 1 : maxIter
 
-	cvx_begin quiet
+    cvx_begin quiet
         cvx_precision default
         variables weightsRefl(nBasisRefl, 1) weightsEm(nBasisEm, 1)
         minimize sum(sum_square_abs(pixelVal - cameraGain.*(cameraMat'*diag(basisRefl*weightsRefl)*illuminant) - cameraGain.*(cameraMat'*tril((basisEm*weightsEm)*(basisEx*weightsEx)',-1)*illuminant))) + alpha*norm(nablaRefl*weightsRefl,2) + beta*norm(nablaEm*weightsEm,2) + gamma*norm(nablaEx*weightsEx,2)
