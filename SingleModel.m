@@ -52,7 +52,7 @@ predFl = zeros([nFilters, nChannels, nSamples]);
 for i = 1:nSamples
 
 	correctPixelVal = pixelVal(:,:,i) - cameraOffset(:,:,i);
-	[reflEst(:,i), rfCoeffs(:,i), emEst(:,i), emCoeffs(:,i), exEst(:,i), exCoeffs(:,i), predRefl(:,:,i), predFl(:,:,i)] = ...
+	[estRefl(:,i), weightsRefl(:,i), estEm(:,i), weightsEm(:,i), estEx(:,i), weightsEx(:,i), predRefl(:,:,i), predFl(:,:,i)] = ...
 		SingleModelSolver(correctPixelVal(:,:,i), cameraMat, cameraGain(:,:,i), illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
 
 end

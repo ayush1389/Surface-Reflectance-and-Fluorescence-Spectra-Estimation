@@ -41,3 +41,27 @@ nBasisRefl = 5;
 nBasisEx = 12;
 nBasisEm = 12;
 
+basisRefl = BasisFunctions('reflectance', wave, nBasisRefl);
+basisEm = BasisFunctions('emmision', wave, nBasisEm);
+basisEx = BasisFunctions('excitation', wave, nBasisEx);
+
+%% Estimation
+[estRefl, weightsRefl, estEm, weightsEm, estEx, weightsEx, predRefl, predFl] = ...
+    SingleModel(measVals, cameraMat, cameraGain, cameraOffset, illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
+
+predMeasVals = predRefl + predFl;
+
+%% Plotting the results
+figure;
+plot(predMeasVals(:), measVals(:));
+xlabel('Predicted pixel value');
+ylabel('Measured pixel value');
+
+
+
+
+
+
+
+
+
