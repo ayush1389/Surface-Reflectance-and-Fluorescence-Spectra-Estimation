@@ -50,11 +50,13 @@ predFl = zeros([nFilters, nChannels, nSamples]);
 %% Processing each sample
 
 for i = 1:nSamples
-
+    fprintf('Processing Sample %d of %d ... ', i, nSamples); 
 	correctPixelVal = pixelVal(:,:,i) - cameraOffset(:,:,i);
 	[estRefl(:,i), weightsRefl(:,i), estEm(:,i), weightsEm(:,i), estEx(:,i), weightsEx(:,i), predRefl(:,:,i), predFl(:,:,i)] = ...
-		SingleModelSolver(correctPixelVal(:,:,i), cameraMat, cameraGain(:,:,i), illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
-
+		SingleModelSolver(correctPixelVal, cameraMat, cameraGain(:,:,i), illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
+    fprintf('Done.\n');
 end
+
+fprintf('Finished processing all %d samples.\n', nSamples);
 
 end

@@ -6,6 +6,7 @@ filename = 'McNamara-Boswell_4x6x1_qe_0.10.mat';
 filename = fullfile('data', filename);
 load(filename);
 nSamples = size(measVals, 3);
+fprintf('Dataset loaded.\n');
 
 %% Wavelength information
 nWaves = length(wave);
@@ -20,12 +21,14 @@ qe = ReadSpectra(filename, wave);
 
 cameraMat = diag(qe) * filters;
 nFilters = size(cameraMat, 2);
+fprintf('Camera data loaded.\n');
 
 %% Loading illuminant data
 filename = fullfile('camera', 'illuminants');
 illuminant = ReadSpectra(filename, wave);
 illuminant = Energy2Quanta(wave, illuminant);
 nChannels = size(illuminant, 2);
+fprintf('Illuminant data loaded.\n');
 
 %% Extending camera parameters for all samples
 cameraGain = repmat(cameraGain,[1 1 nSamples]);
@@ -42,10 +45,14 @@ nBasisEx = 12;
 nBasisEm = 12;
 
 basisRefl = BasisFunctions('reflectance', wave, nBasisRefl);
-basisEm = BasisFunctions('emmision', wave, nBasisEm);
+basisEm = BasisFunctions('emission', wave, nBasisEm);
 basisEx = BasisFunctions('excitation', wave, nBasisEx);
 
+fprintf('Basis functions generated.\n');
+
 %% Estimation
+fprintf('Beginning estimation ...\n');
+maxIter = 20;
 [estRefl, weightsRefl, estEm, weightsEm, estEx, weightsEx, predRefl, predFl] = ...
     SingleModel(measVals, cameraMat, cameraGain, cameraOffset, illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
 
@@ -53,15 +60,6 @@ predMeasVals = predRefl + predFl;
 
 %% Plotting the results
 figure;
-plot(predMeasVals(:), measVals(:));
+plot(predMeasVals(:), measVals(:), '.');
 xlabel('Predicted pixel value');
 ylabel('Measured pixel value');
-
-
-
-
-
-
-
-
-

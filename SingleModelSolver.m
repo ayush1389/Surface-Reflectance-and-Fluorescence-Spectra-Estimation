@@ -40,7 +40,7 @@ illuminant = illuminant*maxVal;
 %% Difference operator
 posPart = [eye(nWaves-1) zeros(nWaves-1,1)];
 negPart = [zeros(nWaves-1,1) eye(nWaves-1)];
-nabla = posPart - megPart;
+nabla = posPart - negPart;
 nablaRefl = nabla * basisRefl;
 nablaEx = nabla * basisEx;
 nablaEm = nabla * basisEm;
