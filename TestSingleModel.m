@@ -31,8 +31,18 @@ nChannels = size(illuminant, 2);
 fprintf('Illuminant data loaded.\n');
 
 %% Extending camera parameters for all samples
-cameraGain = repmat(cameraGain,[1 1 nSamples]);
-cameraOffset = repmat(cameraOffset,[1 1 nSamples]);
+% cameraGain = repmat(cameraGain,[1 1 nSamples]);
+% cameraOffset = repmat(cameraOffset,[1 1 nSamples]);
+
+%% Adding Gaussian noise
+measValsNoise = max(measVals + 0.01*randn(size(measVals)),0);
+        
+localCameraGain = repmat(cameraGain,[1 1 nSamples]);
+localCameraOffset = repmat(cameraOffset,[1 1 nSamples]);
+        
+nF = max(max(measValsNoise,[],1),[],2);
+localCameraGain = localCameraGain./repmat(nF,[nFilters nChannels 1]);
+measValsNoise = measValsNoise./repmat(nF,[nFilters nChannels 1]);
 
 %% Estimation parameters
 alpha = 0.1;
@@ -54,7 +64,7 @@ fprintf('Basis functions generated.\n');
 fprintf('Beginning estimation ...\n');
 maxIter = 20;
 [estRefl, weightsRefl, estEm, weightsEm, estEx, weightsEx, predRefl, predFl] = ...
-    SingleModel(measVals, cameraMat, cameraGain, cameraOffset, illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
+    SingleModel(measValsNoise, cameraMat, localCameraGain*deltaWave, localCameraOffset, illuminant, basisRefl, basisEm, basisEx, alpha, beta, gamma, maxIter);
 
 predMeasVals = predRefl + predFl;
 
